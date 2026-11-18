@@ -25,3 +25,7 @@ arch('notifications provide an email representation')
 arch('enums stay framework agnostic')
     ->expect('App\Enums')
     ->not->toUse('Illuminate');
+
+arch('the application does not use Livewire')
+    ->expect('App')
+    ->not->toUse('Livewire');

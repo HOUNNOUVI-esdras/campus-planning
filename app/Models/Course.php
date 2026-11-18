@@ -8,24 +8,26 @@ use Database\Factories\CourseFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property int $id
  * @property int $professor_id
+ * @property int|null $group_id
  * @property string $title
  * @property string $room
  * @property Weekday $day_of_week
  * @property string $starts_at
  * @property string $ends_at
  * @property User $professor
+ * @property Group|null $group
  * @property CarbonImmutable|null $created_at
  * @property CarbonImmutable|null $updated_at
  */
-#[Fillable(['professor_id', 'title', 'room', 'day_of_week', 'starts_at', 'ends_at'])]
+#[Fillable(['professor_id', 'group_id', 'title', 'room', 'day_of_week', 'starts_at', 'ends_at'])]
 class Course extends Model
 {
     /** @use HasFactory<CourseFactory> */
@@ -78,13 +80,23 @@ class Course extends Model
     }
 
     /**
-     * Get the students enrolled in the course.
+     * Get the group following the course.
      *
-     * @return BelongsToMany<User, $this>
+     * @return BelongsTo<Group, $this>
      */
-    public function students(): BelongsToMany
+    public function group(): BelongsTo
     {
-        return $this->belongsToMany(User::class, 'course_student', 'course_id', 'user_id');
+        return $this->belongsTo(Group::class);
+    }
+
+    /**
+     * Get the students following the course through its group.
+     *
+     * @return Collection<int, User>
+     */
+    public function enrolledStudents(): Collection
+    {
+        return $this->group->students ?? new Collection;
     }
 
     /**
@@ -100,7 +112,7 @@ class Course extends Model
         }
 
         return $query->whereHas(
-            'students',
+            'group.students',
             fn (Builder $query): Builder => $query->whereKey($user->id),
         );
     }

@@ -16,7 +16,7 @@ class CoursePolicy
             return $course->professor_id === $user->id;
         }
 
-        return $course->students()->whereKey($user->id)->exists();
+        return $course->group?->students()->whereKey($user->id)->exists() ?? false;
     }
 
     /**

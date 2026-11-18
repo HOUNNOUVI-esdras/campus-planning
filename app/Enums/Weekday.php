@@ -2,6 +2,7 @@
 
 namespace App\Enums;
 
+use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
 
 enum Weekday: int
@@ -52,6 +53,22 @@ enum Weekday: int
     public static function fromDate(CarbonInterface $date): self
     {
         return self::from($date->isoWeekday());
+    }
+
+    /**
+     * Get the Monday that starts the current week.
+     */
+    public static function currentWeekStart(): CarbonImmutable
+    {
+        return CarbonImmutable::now()->startOfWeek(self::Monday->value)->startOfDay();
+    }
+
+    /**
+     * Get the date of this weekday in the week that starts on the given Monday.
+     */
+    public function dateInWeekOf(CarbonImmutable $weekStart): CarbonImmutable
+    {
+        return $weekStart->addDays($this->value - 1);
     }
 
     /**

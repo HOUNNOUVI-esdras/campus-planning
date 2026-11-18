@@ -1,67 +1,73 @@
 # Campus Planning
 
-A weekly timetable app for a university. Professors manage their courses, students see the ones they are enrolled in, and everyone gets an email when a course is created, changed, or cancelled.
+Application d'emploi du temps universitaire, utilisée comme base pour le cours de TDD (Test-Driven Development) de L3.
 
-Built with Laravel 13, Livewire 4, Flux UI and Tailwind CSS 4.
+Les professeurs programment leurs cours pour un groupe d'étudiants. L'administrateur gère les groupes. Les étudiants voient les cours de leurs groupes et chaque participant reçoit un email quand un cours est créé, modifié ou annulé.
 
-## Features
+Construite avec Laravel 13, des vues Blade simples et Tailwind CSS 4. Les tests utilisent Pest.
 
-- Weekly calendar (Monday to Saturday) with side-by-side course layout
-- Professor and student roles with scoped course visibility
-- Create, edit and cancel courses, with a free-slot check (room, day, time)
-- Enroll students in a course, with email notifications
-- Authentication with email verification, two-factor auth and passkeys
+## Fonctionnalités
 
-## Requirements
+- Calendrier de la semaine, du lundi au samedi, de 08:00 à 20:00.
+- Trois rôles : administrateur, professeur, étudiant.
+- Création, modification et annulation d'un cours, avec un contrôle des chevauchements pour un même professeur.
+- Groupes d'étudiants gérés par l'administrateur. Un cours est suivi par un groupe.
+- Notifications par email. Un email en échec n'annule pas l'opération.
+- Connexion par email et mot de passe, avec vérification de l'email.
 
-- PHP 8.4
-- Composer
-- Node.js and npm
-- SQLite (default), or any database Laravel supports
+## Installation
 
-## Setup
+Prérequis : PHP 8.4, Composer, Node.js et npm. La base de données par défaut est SQLite.
 
 ```bash
 composer setup
+php artisan migrate:fresh --seed
 ```
 
-This installs dependencies, creates `.env`, generates the app key, migrates, and builds assets.
-
-To seed demo data:
-
-```bash
-php artisan db:seed
-```
-
-## Development
+## Lancer l'application
 
 ```bash
 composer run dev
 ```
 
-Runs the PHP server, Vite and the queue listener together. The app is available at `http://localhost:8000`.
+L'application est disponible sur `http://localhost:8000`.
 
-## Demo accounts
+## Comptes de démonstration
 
-Password for all seeded users: `password`.
+Mot de passe commun : `password`.
 
-| Role      | Email                    |
-| --------- | ------------------------ |
-| Professor | `awa.sossou@univ.test`   |
-| Professor | `koffi.dossou@univ.test` |
-| Student   | `alice.houngbo@univ.test` |
-| Student   | `bob.adjovi@univ.test`    |
+| Rôle | Email |
+| --- | --- |
+| Administrateur | `admin@univ.test` |
+| Professeur | `awa.sossou@univ.test` |
+| Professeur | `koffi.dossou@univ.test` |
+| Étudiant | `alice.houngbo@univ.test` |
+| Étudiant | `bob.adjovi@univ.test` |
 
 ## Tests
+
+```bash
+php artisan test
+```
+
+Pour lancer aussi le formatage (Pint) et l'analyse statique (PHPStan) :
 
 ```bash
 composer test
 ```
 
-Runs Pint, PHPStan and the Pest suite.
+## Exercice : les jours spéciaux
 
-To run only the tests:
+À vous d'ajouter cette fonctionnalité, en TDD :
+
+> Un administrateur déclare un jour spécial (par exemple une journée pédagogique). Ce jour-là, aucun cours ne peut être programmé ni déplacé.
+
+Commencez par la liste des scénarios, écrivez un test qui échoue, puis le code le plus simple qui le fait passer.
+
+## Branche `draft`
+
+La branche `draft` contient une solution de l'exercice des jours spéciaux. Consultez-la seulement après avoir essayé.
 
 ```bash
-php artisan test
+git switch draft
 ```

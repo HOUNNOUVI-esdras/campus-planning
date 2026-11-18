@@ -12,23 +12,23 @@
 
                 <nav class="flex items-center gap-2">
                     @auth
-                        <flux:button :href="route('dashboard')" variant="primary" icon="calendar-days" wire:navigate>
+                        <x-ui.button :href="route('dashboard')" variant="primary">
                             {{ __('Ouvrir mon calendrier') }}
-                        </flux:button>
+                        </x-ui.button>
                     @else
-                        <flux:button :href="route('login')" variant="ghost" wire:navigate class="hidden sm:inline-flex">
+                        <x-ui.button :href="route('login')" variant="ghost" class="hidden sm:inline-flex">
                             {{ __('Se connecter') }}
-                        </flux:button>
-                        <flux:button :href="route('register')" variant="primary" wire:navigate>
+                        </x-ui.button>
+                        <x-ui.button :href="route('register')" variant="primary">
                             {{ __('Créer un compte') }}
-                        </flux:button>
+                        </x-ui.button>
                     @endauth
                 </nav>
             </header>
 
             <main class="grid flex-1 items-center gap-16 py-14 lg:grid-cols-[1.05fr_0.95fr] lg:py-20">
                 <section class="max-w-2xl">
-                    <flux:badge color="sky" icon="academic-cap">{{ __('Planning universitaire') }}</flux:badge>
+                    <x-ui.badge>{{ __('Planning universitaire') }}</x-ui.badge>
 
                     <h1 class="mt-6 text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
                         {{ __("L'emploi du temps de la semaine, enfin lisible.") }}
@@ -40,26 +40,24 @@
 
                     <div class="mt-8 flex flex-wrap items-center gap-3">
                         @guest
-                            <flux:button :href="route('register')" variant="primary" icon="arrow-right" wire:navigate class="h-11 px-5">
+                            <x-ui.button :href="route('register')" variant="primary" class="h-11 px-5">
                                 {{ __('Commencer gratuitement') }}
-                            </flux:button>
-                            <flux:button :href="route('login')" wire:navigate class="h-11 px-5">
+                            </x-ui.button>
+                            <x-ui.button :href="route('login')" class="h-11 px-5">
                                 {{ __('J\'ai déjà un compte') }}
-                            </flux:button>
+                            </x-ui.button>
                         @else
-                            <flux:button :href="route('dashboard')" variant="primary" icon="calendar-days" wire:navigate class="h-11 px-5">
+                            <x-ui.button :href="route('dashboard')" variant="primary" class="h-11 px-5">
                                 {{ __('Voir ma semaine') }}
-                            </flux:button>
+                            </x-ui.button>
                         @endguest
                     </div>
 
                     <div class="mt-10 flex flex-col gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-4 text-sm text-zinc-400 sm:flex-row sm:items-center sm:gap-6">
                         <div class="flex items-center gap-2">
-                            <flux:icon name="envelope" class="size-4 text-sky-400" />
                             {{ __('Notifications email automatiques') }}
                         </div>
                         <div class="flex items-center gap-2">
-                            <flux:icon name="user-group" class="size-4 text-violet-400" />
                             {{ __('Vue professeur et étudiant') }}
                         </div>
                     </div>
@@ -131,7 +129,6 @@
                         </div>
 
                         <div class="flex items-center gap-2 border-t border-white/10 px-5 py-3 text-[11px] text-zinc-500">
-                            <flux:icon name="paper-airplane" class="size-3.5 text-sky-400" />
                             {{ __('4 participants notifiés par email') }}
                         </div>
                     </div>
@@ -143,6 +140,5 @@
             </footer>
         </div>
 
-        @fluxScripts
     </body>
 </html>

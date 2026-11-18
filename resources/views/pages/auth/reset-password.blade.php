@@ -11,7 +11,7 @@
             <input type="hidden" name="token" value="{{ request()->route('token') }}">
 
             <!-- Email Address -->
-            <flux:input
+            <x-ui.input
                 name="email"
                 value="{{ request('email') }}"
                 :label="__('Email')"
@@ -21,7 +21,7 @@
             />
 
             <!-- Password -->
-            <flux:input
+            <x-ui.input
                 name="password"
                 :label="__('Password')"
                 type="password"
@@ -29,11 +29,10 @@
                 autocomplete="new-password"
                 :placeholder="__('Password')"
                 passwordrules="{{ \Illuminate\Validation\Rules\Password::defaults()->toPasswordRulesString() }}"
-                viewable
             />
 
             <!-- Confirm Password -->
-            <flux:input
+            <x-ui.input
                 name="password_confirmation"
                 :label="__('Confirm password')"
                 type="password"
@@ -41,13 +40,12 @@
                 autocomplete="new-password"
                 :placeholder="__('Confirm password')"
                 passwordrules="{{ \Illuminate\Validation\Rules\Password::defaults()->toPasswordRulesString() }}"
-                viewable
             />
 
             <div class="flex items-center justify-end">
-                <flux:button type="submit" variant="primary" class="w-full" data-test="reset-password-button">
+                <x-ui.button type="submit" variant="primary" class="w-full" data-test="reset-password-button">
                     {{ __('Reset password') }}
-                </flux:button>
+                </x-ui.button>
             </div>
         </form>
     </div>

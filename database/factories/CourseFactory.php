@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Enums\Room;
 use App\Enums\Weekday;
 use App\Models\Course;
+use App\Models\Group;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -24,6 +25,7 @@ class CourseFactory extends Factory
 
         return [
             'professor_id' => User::factory()->professor(),
+            'group_id' => Group::factory(),
             'title' => fake()->randomElement([
                 'Algorithmique',
                 'Bases de données',

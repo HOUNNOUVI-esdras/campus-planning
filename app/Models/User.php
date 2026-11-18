@@ -14,9 +14,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
-use Laravel\Fortify\Contracts\PasskeyUser;
-use Laravel\Fortify\PasskeyAuthenticatable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
 
 /**
  * @property int $id
@@ -25,19 +22,16 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property Role $role
  * @property Carbon|null $email_verified_at
  * @property string $password
- * @property string|null $two_factor_secret
- * @property string|null $two_factor_recovery_codes
- * @property Carbon|null $two_factor_confirmed_at
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
 #[Fillable(['name', 'email', 'password', 'role'])]
-#[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
-class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
+#[Hidden(['password', 'remember_token'])]
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
+    use HasFactory, Notifiable;
 
     /**
      * Get the attributes that should be cast.
@@ -54,19 +48,19 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
     }
 
     /**
+     * Determine if the user is an administrator.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === Role::Admin;
+    }
+
+    /**
      * Determine if the user is a professor.
      */
     public function isProfessor(): bool
     {
         return $this->role === Role::Professor;
-    }
-
-    /**
-     * Determine if the user is a student.
-     */
-    public function isStudent(): bool
-    {
-        return $this->role === Role::Student;
     }
 
     /**
@@ -80,13 +74,13 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
     }
 
     /**
-     * Get the courses the user is enrolled in.
+     * Get the groups the student belongs to.
      *
-     * @return BelongsToMany<Course, $this>
+     * @return BelongsToMany<Group, $this>
      */
-    public function enrolledCourses(): BelongsToMany
+    public function groups(): BelongsToMany
     {
-        return $this->belongsToMany(Course::class, 'course_student', 'user_id', 'course_id');
+        return $this->belongsToMany(Group::class, 'group_student', 'user_id', 'group_id');
     }
 
     /**
