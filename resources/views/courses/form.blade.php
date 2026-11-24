@@ -30,6 +30,16 @@
                 @method('PUT')
             @endif
 
+            @if ($errors->any())
+                <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/50 dark:text-red-200">
+                    <ul class="list-disc space-y-1 ps-5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <div class="grid items-start gap-4 sm:grid-cols-2">
                 <x-ui.field class="sm:col-span-2">
                     <x-ui.label for="title">{{ __('Intitulé du cours') }}</x-ui.label>
