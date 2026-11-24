@@ -10,8 +10,7 @@ use Illuminate\Http\Request;
 class SpecialDayController extends Controller
 {
     public function store(Request $request)
-    {
-        abort_unless($request->user()->isProfessor(), 403);
+    {abort_unless($request->user()->isAdmin(), 403);
 
         $data = $request->validate([
             'libelle'    => 'required|string|max:255',
@@ -38,7 +37,7 @@ class SpecialDayController extends Controller
 
     public function update(Request $request, SpecialDay $specialDay)
     {
-        abort_unless($request->user()->isProfessor(), 403);
+abort_unless($request->user()->isAdmin(), 403);
 
         $data = $request->validate(['libelle' => 'required|string|max:255']);
         $specialDay->update($data);
