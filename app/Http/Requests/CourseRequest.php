@@ -5,7 +5,9 @@ namespace App\Http\Requests;
 use App\Enums\Room;
 use App\Enums\Weekday;
 use App\Models\Course;
+use App\Models\SpecialDay;
 use App\Models\User;
+use Carbon\CarbonImmutable;
 use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -87,6 +89,12 @@ class CourseRequest extends FormRequest
                     return;
                 }
 
+                if ($this->fallsOnASpecialDay()) {
+                    $validator->errors()->add('day_of_week', 'Ce jour est un jour spécial : aucun cours ne peut y avoir lieu.');
+
+                    return;
+                }
+
                 if ($this->overlapsAnotherCourse()) {
                     $validator->errors()->add('starts_at', 'Ce créneau chevauche un autre cours que vous enseignez déjà.');
                 }
@@ -117,6 +125,21 @@ class CourseRequest extends FormRequest
             ->when($this->editedCourse(), fn ($query, Course $course) => $query->whereKeyNot($course->id))
             ->where('starts_at', '<', $this->string('ends_at').':00')
             ->where('ends_at', '>', $this->string('starts_at').':00')
+            ->exists();
+    }
+
+    /**
+     * Determine if the chosen weekday of the current week is an active special day.
+     */
+    private function fallsOnASpecialDay(): bool
+    {
+        $date = CarbonImmutable::now()
+            ->startOfWeek(Weekday::Monday->value)
+            ->addDays($this->integer('day_of_week') - Weekday::Monday->value);
+
+        return SpecialDay::query()
+            ->where('date', $date->toDateString())
+            ->where('status', 'actif')
             ->exists();
     }
 }
